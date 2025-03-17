@@ -1,0 +1,171 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPuU24brYs5DPHCNPoIyl4W"
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "source": [
+        "print(\"Hello World\")\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "KHkxMXD9PVPH",
+        "outputId": "6e1989e8-9e29-4d37-f2f3-8e63a936f122"
+      },
+      "execution_count": 3,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Hello World\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "class Libro:\n",
+        "    def __init__(self, titulo, autor, isbn):\n",
+        "        self.titulo = titulo\n",
+        "        self.autor = autor\n",
+        "        self.isbn = isbn\n",
+        "        self.disponible = True  # Por defecto, el libro está disponible\n",
+        "\n",
+        "    def prestar(self):\n",
+        "        if self.disponible:\n",
+        "            self.disponible = False\n",
+        "            print(f\"El libro '{self.titulo}' ha sido prestado con éxito.\")\n",
+        "        else:\n",
+        "            print(f\"El libro '{self.titulo}' ya está prestado.\")\n",
+        "\n",
+        "    def devolver(self):\n",
+        "        if not self.disponible:\n",
+        "            self.disponible = True\n",
+        "            print(f\"El libro '{self.titulo}' ha sido devuelto con éxito.\")\n",
+        "        else:\n",
+        "            print(f\"El libro '{self.titulo}' ya estaba disponible.\")\n",
+        "\n",
+        "    def mostrar(self):\n",
+        "        estado = \"Sí\" if self.disponible else \"No\"\n",
+        "        return f\"- {self.titulo} ({self.autor}) - ISBN: {self.isbn} - Disponible: {estado}\"\n",
+        "\n",
+        "\n",
+        "# Función para buscar un libro por su ISBN en la lista de libros\n",
+        "def buscar_libro_por_isbn(isbn, inventario):\n",
+        "    for libro in inventario:\n",
+        "        if libro.isbn == isbn:\n",
+        "            return libro\n",
+        "    return None\n",
+        "\n",
+        "\n",
+        "# Menú principal del sistema de gestión de biblioteca\n",
+        "def menu():\n",
+        "    inventario = []  # Lista para almacenar los objetos Libro\n",
+        "\n",
+        "    while True:\n",
+        "        print(\"\\nBienvenido al Sistema de Gestión de Biblioteca\")\n",
+        "        print(\"\") #linea en blanco.\n",
+        "        print(\"1. Agregar libro\")\n",
+        "        print(\"2. Prestar libro\")\n",
+        "        print(\"3. Devolver libro\")\n",
+        "        print(\"4. Mostrar libros\")\n",
+        "        print(\"5. Buscar libro\")\n",
+        "        print(\"6. Salir\")\n",
+        "        print(\"\") #linea en blanco.\n",
+        "\n",
+        "        opcion = input(\"Elige una opción: \")\n",
+        "        print(\"\") #linea en blanco.\n",
+        "\n",
+        "        if opcion == \"1\":\n",
+        "            # Agregar un nuevo libro\n",
+        "            titulo = input(\"Título: \")\n",
+        "            autor = input(\"Autor: \")\n",
+        "            isbn = input(\"ISBN: \")\n",
+        "\n",
+        "\n",
+        "            # Validar que el ISBN no esté duplicado\n",
+        "            if any(libro.isbn == isbn for libro in inventario):\n",
+        "                print(\"Error: Ya existe un libro con este ISBN.\")\n",
+        "            else:\n",
+        "                nuevo_libro = Libro(titulo, autor, isbn)\n",
+        "                inventario.append(nuevo_libro)\n",
+        "                print(\"Libro agregado con éxito.\")\n",
+        "\n",
+        "        elif opcion == \"2\":\n",
+        "            # Prestar un libro\n",
+        "            isbn = input(\"Ingresa el ISBN del libro a prestar: \")\n",
+        "            libro = buscar_libro_por_isbn(isbn, inventario)\n",
+        "\n",
+        "            if libro:\n",
+        "                libro.prestar()\n",
+        "            else:\n",
+        "                print(\"Error: No se encontró ningún libro con ese ISBN.\")\n",
+        "\n",
+        "        elif opcion == \"3\":\n",
+        "            # Devolver un libro\n",
+        "            isbn = input(\"Ingresa el ISBN del libro a devolver: \")\n",
+        "            libro = buscar_libro_por_isbn(isbn, inventario)\n",
+        "\n",
+        "            if libro:\n",
+        "                libro.devolver()\n",
+        "            else:\n",
+        "                print(\"Error: No se encontró ningún libro con ese ISBN.\")\n",
+        "\n",
+        "        elif opcion == \"4\":\n",
+        "            # Mostrar todos los libros\n",
+        "            if not inventario:\n",
+        "                print(\"No hay libros registrados en la biblioteca.\")\n",
+        "            else:\n",
+        "                print(\"\\nLista de libros:\")\n",
+        "                for libro in inventario:\n",
+        "                    print(libro.mostrar())\n",
+        "\n",
+        "        elif opcion == \"5\":\n",
+        "            # Buscar un libro por ISBN\n",
+        "            isbn = input(\"Ingresa el ISBN del libro a buscar: \")\n",
+        "            libro = buscar_libro_por_isbn(isbn, inventario)\n",
+        "\n",
+        "            if libro:\n",
+        "                print(libro.mostrar())\n",
+        "            else:\n",
+        "                print(\"Error: No se encontró ningún libro con ese ISBN.\")\n",
+        "\n",
+        "        elif opcion == \"6\":\n",
+        "            # Salir del programa\n",
+        "            print(\"Gracias por usar el Sistema de Gestión de Biblioteca. ¡Hasta luego!\")\n",
+        "            break\n",
+        "\n",
+        "        else:\n",
+        "            # Opción inválida\n",
+        "            print(\"Opción inválida. Por favor, selecciona una opción válida.\")\n",
+        "\n",
+        "\n",
+        "# Ejecutar el menú principal\n",
+        "if __name__ == \"__main__\":\n",
+        "    menu()"
+      ],
+      "metadata": {
+        "id": "aRYN1UcHZWd1"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
